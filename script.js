@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Umschool script
 // @namespace    http://tampermonkey.net/
-// @version      0.3 beta
+// @version      0.3.4 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/uber_vlad
 // @match        https://new.umschool.net/*
@@ -11,8 +11,10 @@
 var url = document.URL;
 url = url.split('//')[1].split('/');
 
-// стили для кнопки
-var style = '.yt_button_script {background-color: #be2413; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_script:hover {background-color: #df3c2a;} .yt_button_script:active {background-color: #d96154;}';
+// для редактирования страницы
+var button_style = '.yt_button_script {background-color: #be2413; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_script:hover {background-color: #df3c2a;} .yt_button_script:active {background-color: #d96154;}';
+var bear_image_new_src = 'https://i.ibb.co/G089qYZ/bear-icon.png';
+
 var autoloading = false; // переключатель автозапуска
 var src;
 var clock;
@@ -26,13 +28,13 @@ if (getCookie('settings_autoloading')) autoloading = (getCookie('settings_autolo
 console.log(document.cookie); // DEBUG
 
 
-if (url[1] == 'mastergroup' & url[2] == 'lessons' & url[4] == '') // блок кода для страницы веба
+if (url[1] == 'mastergroup' & url[2] == 'lessons' & ( url[4] == '' | url[4] == '#' ) ) // блок кода для страницы веба
 {
     let elem = document.body.getElementsByClassName('preview-title')[0];
     if (!elem) elem = document.body.getElementsByClassName('date-container')[0];
     if (elem)
     {
-        document.head.innerHTML += '<style>' + style + '</style>';
+        document.head.innerHTML += '<style>' + button_style + '</style>';
         elem.innerHTML += '<br><input class="yt_button_script" type="button" value="Открыть вебинар на ютубе"> ';
         button = elem.getElementsByClassName('yt_button_script')[0];
     }
@@ -64,6 +66,9 @@ else if (url[1] == 'core' & url[2] == 'profile' & url[3] == 'edit') // блок 
         autoloading_toggler.onclick = function SLF2() { autoloading_toggle() };
     }
 }
+
+var bear_image = document.body.getElementsByClassName('bear-notifier-img')[0];
+bear_image.src = bear_image_new_src;
 
 //
 function autoloading_toggle()
