@@ -1,107 +1,11 @@
 // ==UserScript==
 // @name         Umschool script
 // @namespace    http://tampermonkey.net/
-// @version      0.3.4 beta
+// @version      0.4 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/uber_vlad
 // @match        https://new.umschool.net/*
 // @grant        none
 // ==/UserScript==
 
-var url = document.URL;
-url = url.split('//')[1].split('/');
-
-// для редактирования страницы
-var button_style = '.yt_button_script {background-color: #be2413; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_script:hover {background-color: #df3c2a;} .yt_button_script:active {background-color: #d96154;}';
-var bear_image_new_src = 'https://i.ibb.co/G089qYZ/bear-icon.png';
-
-var autoloading = false; // переключатель автозапуска
-var src;
-var clock;
-var timer = 1.5; // таймер для автозапуска
-var initial_timer = 0; // таймер для поиска и добавления элементов
-// элементы страницы
-var button;
-var autoloading_toggler;
-
-if (getCookie('settings_autoloading')) autoloading = (getCookie('settings_autoloading') == '1')? true : false;
-console.log(document.cookie); // DEBUG
-
-
-if (url[1] == 'mastergroup' & url[2] == 'lessons' & ( url[4] == '' | url[4] == '#' ) ) // блок кода для страницы веба
-{
-    let elem = document.body.getElementsByClassName('preview-title')[0];
-    if (!elem) elem = document.body.getElementsByClassName('date-container')[0];
-    if (elem)
-    {
-        document.head.innerHTML += '<style>' + button_style + '</style>';
-        elem.innerHTML += '<br><input class="yt_button_script" type="button" value="Открыть вебинар на ютубе"> ';
-        button = elem.getElementsByClassName('yt_button_script')[0];
-    }
-
-    if (autoloading)
-    {
-        clock = setTimeout(yt_start, timer * 1000);
-    }
-
-    if (button)
-    {
-        button.onclick = function SLF1() { yt_start(); };
-    }
-}
-else if (url[1] == 'core' & url[2] == 'profile' & url[3] == 'edit') // блок кода для страницы Профиля/Настроек
-{
-    let elem = document.body.getElementsByClassName('content')[0];
-    if (elem)
-    {
-        elem.innerHTML += '<h3><b>Настройки Umschool script</b></h3>';
-        elem.innerHTML += '<input class="settings_autoloading_toggler" type="checkbox"> автозапуск вебинаров на ютубе';
-        elem.innerHTML += '<br><b><a href="https://vk.com/uber_vlad" target="_blank" style="color: #f19137">По всем багам и вопросам писать сюда.</a></b>';
-        autoloading_toggler = elem.getElementsByClassName('settings_autoloading_toggler')[0];
-        autoloading_toggler.checked = autoloading;
-    }
-
-    if (autoloading_toggler)
-    {
-        autoloading_toggler.onclick = function SLF2() { autoloading_toggle() };
-    }
-}
-
-var bear_image = document.body.getElementsByClassName('bear-notifier-img')[0];
-bear_image.src = bear_image_new_src;
-
-//
-function autoloading_toggle()
-{
-    let val = (autoloading_toggler.checked)? '1' : '0';
-    setCookie('settings_autoloading', val);
-    //alert(getCookie('settings_autoloading')); // DEBUG
-}
-
-function yt_start()
-{
-    src = document.body.getElementsByClassName('plyr__video-wrapper')[0].children[0].src;
-    src = 'https://youtu.be/' + src.split('embed')[1].split('?')[0];
-    open(src);
-}
-
-// для работы с cookie (с сайта https://learn.javascript.ru/cookie#prilozhenie-funktsii-dlya-raboty-s-kuki)
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
-function setCookie(name, value) {
-
-    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-    updatedCookie += '; path=/; domain=umschool.net; expires=Fri, 31 Dec 9999 23:59:59 GMT;';
-
-    document.cookie = updatedCookie;
-}
-
-function deleteCookie(name) {
-  setCookie(name, "", {
-    'max-age': -1
-  })
-}
+var url=document.URL;url=url.split("//")[1].split("/");var button_main_style=".yt_button_script {background-color: #be2413; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_script:hover {background-color: #df3c2a;} .yt_button_script:active {background-color: #d96154;}",button_down_style=".yt_button_down_script {background-color: #21c809; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_down_script:hover {background-color: #4de038;} .yt_button_down_script:active {background-color: #8edd83;}",bear_image_new_src="https://i.ibb.co/G089qYZ/bear-icon.png",hm_my_style='hr {display: none} .exercise-item {background-color: #f7f6f6; padding: 15px; /*border: 0.5px solid #E6E6E6;*/ border-radius: 20px;} .float-right {float: none !important} .form-control[readonly] {border: 2px #43B15D solid} .form-control[style="background-color: #dc3545; color: #ffffff"] {border: 2px #b14b43 solid;}',scroll_custom_style='::-webkit-scrollbar-button { background-image:url(""); background-repeat:no-repeat; width:6px; height:0px } ::-webkit-scrollbar-track { background-color:#f5f4f3; } ::-webkit-scrollbar-thumb { webkit-border-radius: 5px; border-radius: 5px; background-color:#F19137; box-shadow:0px 1px 1px #fff inset; background-image:url("https://yraaa.ru/_pu/24/59610063.png"); background-position:center; background-repeat:no-repeat; } ::-webkit-resizer{ background-image:url(""); background-repeat:no-repeat; width:7px; height:0px } ::-webkit-scrollbar{ width: 11px; }',autoloading=!1;getCookie("settings_autoloading")&&(autoloading="1"==getCookie("settings_autoloading"));var src,clock,experiment=!1;getCookie("settings_experimental")&&(experiment="1"==getCookie("settings_experimental"));var timer=1.5,initial_timer=0,styles="";if("mastergroup"==url[1]&"lessons"==url[2]&(""==url[4]|"#"==url[4])){if(elem=(elem=document.body.getElementsByClassName("preview-title")[0])||document.body.getElementsByClassName("date-container")[0]){styles+=button_main_style,elem.innerHTML+='<br><input class="yt_button_script" type="button" value="Открыть вебинар на ютубе"> ',"preview-title"==elem.classList[0]&experiment&&(styles+=button_down_style,elem.innerHTML+='<input class="yt_button_down_script" type="button" value="Скачать вебинар [β]" style="margin-left: 10px;"> ');var button=elem.getElementsByClassName("yt_button_script")[0];if(experiment)var button_down=elem.getElementsByClassName("yt_button_down_script")[0]}autoloading&&(clock=setTimeout(yt_start,1e3*timer)),button&&(button.onclick=function(){yt_start()}),button_down&experiment&&(button_down.onclick=function(){yt_download()})}else if("core"==url[1]&"profile"==url[2]&"edit"==url[3]){var elem;if(elem=document.body.getElementsByClassName("content")[0]){var html="";if(html+="<h3><b>Настройки Umschool script</b></h3>",html+='<input class="settings_autoloading_toggler" type="checkbox"> Автозапуск вебинаров на ютубе',html+='<br><input class="settings_experimental_toggler" type="checkbox"> Экспериментальные функции',html+='<br><a href="https://vk.com/uber_vlad" target="_blank" style="color: #f19137">По всем багам и вопросам писать сюда.</a>',experiment)var html_ex="";elem.innerHTML+=html;var autoloading_toggler=elem.getElementsByClassName("settings_autoloading_toggler")[0];autoloading_toggler.checked=autoloading;var experimental_toggler=elem.getElementsByClassName("settings_experimental_toggler")[0];experimental_toggler.checked=experiment}autoloading_toggler&&(autoloading_toggler.onclick=function(){autoloading_toggle()}),experimental_toggler&&(experimental_toggler.onclick=function(){experimental_toggle()})}else"mastergroup"==url[1]&"lessons"==url[2]&"homework"==url[4]&experiment&&(styles+=hm_my_style);var bear_image=document.body.getElementsByClassName("bear-notifier-img")[0];if(bear_image.src=bear_image_new_src,experiment){var useless_image=document.body.getElementsByClassName("if-mobile")[1];useless_image.innerHTML="",styles+=scroll_custom_style}function autoloading_toggle(){setCookie("settings_autoloading",autoloading_toggler.checked?"1":"0")}function experimental_toggle(){setCookie("settings_experimental",experimental_toggler.checked?"1":"0"),location.reload()}function yt_start(){src="https://youtu.be/"+(src=document.body.getElementsByClassName("plyr__video-wrapper")[0].children[0].src).split("embed")[1].split("?")[0],open(src)}function yt_download(){src="https://ssyoutube.com/watch?v="+(src=document.body.getElementsByClassName("plyr__video-wrapper")[0].children[0].src).split("embed/")[1].split("?")[0],open(src)}function getCookie(e){var t=document.cookie.match(new RegExp("(?:^|; )"+e.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g,"\\$1")+"=([^;]*)"));return t?decodeURIComponent(t[1]):void 0}function setCookie(e,t){var o=encodeURIComponent(e)+"="+encodeURIComponent(t);o+="; path=/; domain=umschool.net; expires=Fri, 31 Dec 9999 23:59:59 GMT;",document.cookie=o}function deleteCookie(e){setCookie(e,"",{"max-age":-1})}styles&&(document.head.innerHTML+="<style> "+styles+" </style>");
