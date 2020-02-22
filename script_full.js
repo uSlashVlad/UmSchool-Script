@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Umschool script
 // @namespace    http://tampermonkey.net/
-// @version      0.4 beta
+// @version      0.5 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/uber_vlad
 // @match        https://new.umschool.net/*
@@ -16,8 +16,13 @@ url = url.split('//')[1].split('/');
 var button_main_style = '.yt_button_script {background-color: #be2413; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_script:hover {background-color: #df3c2a;} .yt_button_script:active {background-color: #d96154;}';
 var button_down_style = '.yt_button_down_script {background-color: #21c809; border: none; border-radius: 4px; color: white; padding: 5px 10.5px; margin-top: 7.5px; text-align: center; text-decoration: none; display: inline-block; font-size: 18px; font-weight: bold;} .yt_button_down_script:hover {background-color: #4de038;} .yt_button_down_script:active {background-color: #8edd83;}';
 var bear_image_new_src = 'https://i.ibb.co/G089qYZ/bear-icon.png';
-var hm_my_style = 'hr {display: none} .exercise-item {background-color: #f7f6f6; padding: 15px; /*border: 0.5px solid #E6E6E6;*/ border-radius: 20px;} .float-right {float: none !important} .form-control[readonly] {border: 2px #43B15D solid} .form-control[style="background-color: #dc3545; color: #ffffff"] {border: 2px #b14b43 solid;}';
+var hm_my_style = 'hr {display: none} .exercise-item {background-color: #f7f6f6; padding: 15px; /*border: 0.5px solid #E6E6E6;*/ border-radius: 20px;}' +
+    '.float-right {float: none !important}' +
+    '.form-control[readonly] {border: 2px #43B15D solid}' +
+    '.form-control[style="background-color: #dc3545; color: #ffffff"] {border: 2px #b14b43 solid;}' +
+    '.form-control[style="background-color: rgb(220, 53, 69); color: rgb(255, 255, 255); --darkreader-inline-bgcolor:#86272e; --darkreader-inline-color:#ffffff;"] {border: 2px #b14b43 solid;}'; // для тёмной темы Dark Reader
 var scroll_custom_style = '::-webkit-scrollbar-button { background-image:url(""); background-repeat:no-repeat; width:6px; height:0px } ::-webkit-scrollbar-track { background-color:#f5f4f3; } ::-webkit-scrollbar-thumb { webkit-border-radius: 5px; border-radius: 5px; background-color:#F19137; box-shadow:0px 1px 1px #fff inset; background-image:url("https://yraaa.ru/_pu/24/59610063.png"); background-position:center; background-repeat:no-repeat; } ::-webkit-resizer{ background-image:url(""); background-repeat:no-repeat; width:7px; height:0px } ::-webkit-scrollbar{ width: 11px; }';
+var xp_levels = [ 0, 200, 700, 1500, 2350, 4350, 5200, 6050, 6900, 7750, 9750 ];
 
 var autoloading = false; // переключатель автозапуска
 if (getCookie('settings_autoloading')) autoloading = (getCookie('settings_autoloading') == '1')? true : false;
@@ -32,10 +37,10 @@ var initial_timer = 0; // таймер для поиска и добавлени
 var styles = ''; // общая переменная для стилей
 
 
-
-if (url[1] == 'mastergroup' & url[2] == 'lessons' & ( url[4] == '' | url[4] == '#' ) ) // блок кода для страницы веба
+// блок кода для страницы веба
+if (url[1] == 'mastergroup' & url[2] == 'lessons' & (url[4] == '' | url[4] == '#'))
 {
-    var elem = document.body.getElementsByClassName('preview-title')[0];
+    let elem = document.body.getElementsByClassName('preview-title')[0];
     if (!elem) elem = document.body.getElementsByClassName('date-container')[0];
     if (elem)
     {
@@ -67,7 +72,7 @@ if (url[1] == 'mastergroup' & url[2] == 'lessons' & ( url[4] == '' | url[4] == '
 }
 else if (url[1] == 'core' & url[2] == 'profile' & url[3] == 'edit') // блок кода для страницы Профиля/Настроек
 {
-    var elem = document.body.getElementsByClassName('content')[0];
+    let elem = document.body.getElementsByClassName('content')[0];
     if (elem)
     {
         var html = '';
@@ -100,13 +105,69 @@ else if (url[1] == 'core' & url[2] == 'profile' & url[3] == 'edit') // блок 
         experimental_toggler.onclick = function click() { experimental_toggle() };
     }
 }
-else if (url[1] == 'mastergroup' & url[2] == 'lessons' & url[4] == 'homework' & experiment)
+else if (((url[1] == 'mastergroup' & url[2] == 'lessons' & url[4] == 'homework') |
+          (url[1] == 'homework' & url[2] == 'submissions')) & experiment)
 {
     styles += hm_my_style;
 }
 
+// Для отображения в заголовке
+if (url[1] == 'core' & url[2] == 'hw' & url[3] == 'my') {
+    document.title = "Домашние задания";
+}
+else if (url[1] == 'mastergroup') {
+    if (url[2] == 'lessons') {
+        if (url[4] == '' | url[4] == '#') {
+            document.title = "Занятие";
+        }
+        else if (url[4] == 'homework') {
+            let elem = document.body.getElementsByClassName('text-container')[0].children[0];
+            elem = elem.innerHTML.split(' (')[0];
+            document.title = elem;
+        }
+    }
+    else {
+        document.title = "Мастер-группы";
+    }
+}
+else if (url[1] == 'teacher') {
+    document.title = "Преподаватели";
+}
+else if (url[1] == 'core') {
+    if (url[2] == 'profile') {
+        document.title = "Главная страница";
+    }
+    else if (url[2] == 'loyalty') {
+        document.title = "Мои достижения";
+    }
+}
+else if (url[1] == 'course') {
+    document.title = "Курсы";
+}
+
+// замена медведя
 var bear_image = document.body.getElementsByClassName('bear-notifier-img')[0];
 bear_image.src = bear_image_new_src;
+
+// изменение отображения уровней
+if (experiment)
+{
+    var xp_ind = document.body.getElementsByClassName('nav-level')[0];
+    var points = Number(xp_ind.innerHTML.slice(0, -2));
+    if (points != 0)
+    {
+        let a = xp_levels[0];
+        let b = xp_levels[1];
+        let i = 1;
+    
+        while (points > xp_levels[i]) {
+            a = xp_levels[i];
+            b = xp_levels[i+1];
+            i++;
+        }
+        xp_ind.innerHTML = points + 'XP (' + a + '/' + b + ')';
+    }
+}
 
 if (experiment)
 {
