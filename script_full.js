@@ -156,16 +156,14 @@ if (experiment)
     var points = Number(xp_ind.innerHTML.slice(0, -2));
     if (points != 0)
     {
-        let a = xp_levels[0];
-        let b = xp_levels[1];
-        let i = 1;
+        let b = xp_levels[0];
+        let i = 0;
     
         while (points > xp_levels[i]) {
-            a = xp_levels[i];
             b = xp_levels[i+1];
             i++;
         }
-        xp_ind.innerHTML = points + 'XP (' + a + '/' + b + ')';
+        xp_ind.innerHTML = points + 'XP [' + (b - points) + ']';
     }
 }
 
