@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.5 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
-// @author       https://vk.com/uber_vlad
+// @author       https://vk.com/id227730745
 // @match        https://new.umschool.net/*
 // @grant        none
 // ==/UserScript==
@@ -79,7 +79,7 @@ else if (url[1] == 'core' & url[2] == 'profile' & url[3] == 'edit') // блок 
         html += '<h3><b>Настройки Umschool script</b></h3>';
         html += '<input class="settings_autoloading_toggler" type="checkbox"> Автозапуск вебинаров на ютубе';
         html += '<br><input class="settings_experimental_toggler" type="checkbox"> Экспериментальные функции';
-        html += '<br><a href="https://vk.com/uber_vlad" target="_blank" style="color: #f19137">По всем багам и вопросам писать сюда.</a>';
+        html += '<br><a href="https://vk.com/id227730745" target="_blank" style="color: #f19137">По всем багам и вопросам писать сюда.</a>';
 
         if (experiment)
         {
