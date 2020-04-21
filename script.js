@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Umschool script
 // @namespace    http://tampermonkey.net/
-// @version      0.6 beta
+// @version      0.6.1 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/id227730745
 // @match        https://new.umschool.net/*
@@ -22,7 +22,7 @@ var hm_my_style = `hr {display: none} .exercise-item {background-color: #f7f6f6;
     .form-control[style="background-color: #dc3545; color: #ffffff"] {border: 2px #b14b43 solid;}
     .form-control[style="background-color: rgb(220, 53, 69); color: rgb(255, 255, 255); --darkreader-inline-bgcolor:#86272e; --darkreader-inline-color:#ffffff;"] {border: 2px #b14b43 solid;} /*для тёмной темы Dark Reader*/`
 var scroll_custom_style = '::-webkit-scrollbar-button { background-image:url(""); background-repeat:no-repeat; width:6px; height:0px } ::-webkit-scrollbar-track { background-color:#f5f4f3; } ::-webkit-scrollbar-thumb { webkit-border-radius: 5px; border-radius: 5px; background-color:#F19137; box-shadow:0px 1px 1px #fff inset; background-image:url("https://yraaa.ru/_pu/24/59610063.png"); background-position:center; background-repeat:no-repeat; } ::-webkit-resizer{ background-image:url(""); background-repeat:no-repeat; width:7px; height:0px } ::-webkit-scrollbar{ width: 11px; }';
-var xp_levels = [ 0, 200, 700, 1500, 2350, 4350, 5200, 6050, 6900, 7750, 9750 ];
+var xp_levels = [ 0, 200, 700, 1500, 2350, 4350, 5200, 6050, 6900, 7750, 9750, 10600, 11450, 12300, 13150, 15150, 16000, 16850, 17700, 18550, 19400, 20250, 21550, 23050, 28050 ];
 
 var autoloading = false; // переключатель автозапуска
 if (getCookie('settings_autoloading')) autoloading = (getCookie('settings_autoloading') == '1')? true : false;
