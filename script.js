@@ -4,7 +4,7 @@
 // @version      0.6.1 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/id227730745
-// @match        https://new.umschool.net/*
+// @match        https://umschool.net/*
 // @grant        none
 // ==/UserScript==
 
