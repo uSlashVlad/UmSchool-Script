@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Umschool script
 // @namespace    http://tampermonkey.net/
-// @version      0.6.1 beta
+// @version      0.6.2 beta
 // @description  Скрипт для того, чтобы запускать вебинары на ютубе
 // @author       https://vk.com/id227730745
 // @match        https://umschool.net/*
